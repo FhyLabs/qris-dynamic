@@ -1,0 +1,42 @@
+{
+  "name": "@fhylabs/qris-dynamic",
+  "version": "1.0.0",
+  "description": "Convert static QRIS codes into dynamic QRIS with automatic transaction amount insertion. Supports all Indonesian QRIS providers (EMVCo/Bank Indonesia).",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc && node scripts/copy-package-json.js",
+    "test": "node tests/commonjs.test.js"
+  },
+  "keywords": [
+    "qris",
+    "dynamic",
+    "static",
+    "qr-code",
+    "payment",
+    "emvco",
+    "bank-indonesia",
+    "dana",
+    "gopay",
+    "ovo",
+    "shopeepay"
+  ],
+  "author": "Fhylabs <cs@fhylabs.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fitri-hy/qris-dynamic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fitri-hy/qris-dynamic/issues"
+  },
+  "homepage": "https://github.com/fitri-hy/qris-dynamic#readme",
+  "dependencies": {
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.7",
+    "@types/qrcode": "^1.5.6",
+    "typescript": "^5.9.3"
+  }
+}
