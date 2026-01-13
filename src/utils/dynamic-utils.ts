@@ -1,4 +1,4 @@
-import { crc16 } from "./crc";
+import { crc16 } from "./crc.js";
 
 export class DynamicUtils {
 

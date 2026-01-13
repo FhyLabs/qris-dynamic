@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QRIS UMD Test</title>
+  <script src="https://cdn.jsdelivr.net/gh/FhyLabs/loom@v1.0.0/dist/QRISDynamic.umd.js"></script>
+</head>
+<body>
+<script>
+(async () => {
+  try {
+    const res = await QRISDynamic.GenerateQris({
+      qris: "000201.........",
+      amount: 15000,
+      type: "base64" // "row" or "base64"
+    });
+    document.body.innerHTML = `<pre>${JSON.stringify(res, null, 2)}</pre>`;
+  } catch (err) {
+    console.error("UMD Test Error:", err);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
-import { QrisMetadata } from "./metadata/qris-metadata";
-import { DynamicUtils } from "./utils/dynamic-utils";
-import { generateQRCodeBase64 } from "./utils/qrcode";
+import { QrisMetadata } from "./metadata/qris-metadata.js";
+import { DynamicUtils } from "./utils/dynamic-utils.js";
+import { generateQRCodeBase64 } from "./utils/qrcode.js";
 
 export type OutputType = "base64" | "row";
 
@@ -10,7 +10,7 @@ export interface GenerateQrisConfig {
   type: OutputType;
 }
 
-export async function generateQris(config: GenerateQrisConfig) {
+export async function GenerateQris(config: GenerateQrisConfig) {
   let qris = config.qris;
 
   qris = DynamicUtils.setDynamic(qris);
@@ -25,14 +25,13 @@ export async function generateQris(config: GenerateQrisConfig) {
       : qris;
 
   return {
-    owner: meta.getMerchant(),
+    merchant: meta.getMerchant(),
     city: meta.getRegion(),
     country: meta.getCountry(),
-    merchant: meta.getCompany(),
     amount: config.amount,
     code,
     date: new Date().toISOString(),
   };
 }
 
-export default { generateQris };
+export default { GenerateQris };

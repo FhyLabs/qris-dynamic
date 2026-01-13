@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "module": "Node16",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node16",
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "noImplicitAny": false,
-    "types": ["node"],
-    "typeRoots": ["./types", "./node_modules/@types"],
     "declaration": true,
     "declarationMap": true,
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "noImplicitAny": false,
+    "types": ["node"]
   },
   "include": ["src/**/*"]
 }

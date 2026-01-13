@@ -1,11 +1,14 @@
-const { generateQris } = require("../dist");
+const { GenerateQris } = require("../dist");
 
 (async () => {
-  const res = await generateQris({
-    qris: "Static QRIS Payload", // Standart EMVCo Bank Indonesia (BI)
-    amount: 15000,
-    type: "base64",
-  });
-
-  console.log(res);
+  try {
+    const res = await GenerateQris({
+      qris: "000201.........",
+      amount: 15000,
+      type: "base64", // "row" or "base64"
+    });
+    console.log("CommonJS Test Result:", res);
+  } catch (err) {
+    console.error("CommonJS Test Error:", err);
+  }
 })();

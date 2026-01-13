@@ -1,8 +1,7 @@
 # QRIS Dynamic
 
 A utility to convert **static QRIS** into **dynamic QRIS** with automatic transaction amount insertion, without breaking the original QRIS structure.
-Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI)** standards
-(DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc).
+Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI)** standards (DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc).
 
 ## Installation
 
@@ -10,12 +9,14 @@ Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI
 npm install @fhylabs/qris-dynamic
 ```
 
+---
+
 ## Usage
 
-### CommonJS (Node.js)
+### Node.js / CommonJS
 
 ```js
-const { generateQris } = require("@fhylabs/qris-dynamic");
+const { generateQris } = require("@fhylabs/qris-dynamic/QRISDynamic.cjs.js");
 
 (async () => {
   const result = await generateQris({
@@ -28,10 +29,12 @@ const { generateQris } = require("@fhylabs/qris-dynamic");
 })();
 ```
 
-### TypeScript / ESM
+---
+
+### ESM / TypeScript
 
 ```ts
-import { generateQris } from "@fhylabs/qris-dynamic";
+import { generateQris } from "@fhylabs/qris-dynamic/QRISDynamic.esm.js";
 
 const result = await generateQris({
   qris: "00020101021240560011ID.DANA.WWW...",
@@ -42,9 +45,31 @@ const result = await generateQris({
 console.log(result);
 ```
 
+---
+
+### Browser (UMD)
+
+Include via `<script>` tag:
+
+```html
+<script src="node_modules/@fhylabs/qris-dynamic/QRISDynamic.umd.js"></script>
+<script>
+  (async () => {
+    const result = await QRISDynamic.generateQris({
+      qris: "00020101021240560011ID.DANA.WWW...",
+      amount: 15000,
+      type: "row"
+    });
+    console.log(result);
+  })();
+</script>
+```
+
+---
+
 ## Output
 
-### When `type: "base64"`
+### Example when `type: "base64"`
 
 ```json
 {
@@ -57,6 +82,8 @@ console.log(result);
   "date": "2026-01-13T08:30:00.000Z"
 }
 ```
+
+---
 
 ## API Reference
 
@@ -80,9 +107,21 @@ console.log(result);
 | `code`     | `string` | Dynamic QRIS (raw string or Base64 PNG) |
 | `date`     | `string` | QRIS generation timestamp (ISO 8601)    |
 
+---
+
 ### Supported
 
 | Feature   | Description                                 |
 | --------- | ------------------------------------------- |
 | Standard  | EMVCo / QRIS BI                             |
 | Providers | DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc |
+
+---
+
+💡 **Note:**
+
+* For **Node.js**, import `QRISDynamic.cjs.js`.
+* For **ESM / TypeScript**, import `QRISDynamic.esm.js`.
+* For **browser**, use `QRISDynamic.umd.js`.
+
+Ini **menghilangkan semua kebingungan import/export**, dan siap untuk **semua environment**.

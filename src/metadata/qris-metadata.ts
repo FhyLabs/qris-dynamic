@@ -1,4 +1,4 @@
-import { EmvParser } from "../parser/emv-parser";
+import { EmvParser } from "../parser/emv-parser.js";
 
 export class QrisMetadata {
   constructor(
