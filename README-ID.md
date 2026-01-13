@@ -94,7 +94,6 @@ Tambahkan lewat tag `<script>`:
   "owner": "FITRI HERMA YANTI",
   "city": "Kota Tangerang",
   "country": "ID",
-  "merchant": "DANA",
   "amount": 15000,
   "code": "...",
   "date": "2026-01-13T08:30:00.000Z"
@@ -120,7 +119,6 @@ Tambahkan lewat tag `<script>`:
 | `owner`    | `string` | Nama pemilik / merchant QRIS                  |
 | `city`     | `string` | Kota merchant                                 |
 | `country`  | `string` | Kode negara ISO, default `ID`                 |
-| `merchant` | `string` | Vendor / penyedia pembayaran (DANA, OVO, dll) |
 | `amount`   | `number` | Jumlah transaksi                              |
 | `code`     | `string` | QRIS dinamis (string mentah atau Base64 PNG)  |
 | `date`     | `string` | Timestamp pembuatan QRIS (ISO 8601)           |

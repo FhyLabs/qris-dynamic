@@ -1,4 +1,4 @@
-import { GenerateQris } from "../dist/index.js";
+import { GenerateQris } from "@fhylabs/qris-dynamic";
 import { createCanvas } from "canvas";
 
 // Polyfill for canvas in Node.js

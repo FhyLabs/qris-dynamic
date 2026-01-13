@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/FhyLabs/qris-dynamic#readme",
   "dependencies": {
+    "@fhylabs/qris-dynamic": "^1.0.1",
     "canvas": "^3.2.1",
     "qrcode": "^1.5.4"
   },

@@ -1,4 +1,4 @@
-const { GenerateQris } = require("../dist");
+const { GenerateQris } = require("@fhylabs/qris-dynamic");
 
 (async () => {
   try {
