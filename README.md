@@ -1,7 +1,7 @@
 # QRIS Dynamic
 
 A utility to convert **static QRIS** into **dynamic QRIS** with automatic transaction amount insertion, without breaking the original QRIS structure.
-Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI)** standards (DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc).
+Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI)** standards, including **DANA, GoPay, OVO, ShopeePay, Bank QRIS, and more**.
 
 ## Installation
 
@@ -16,16 +16,19 @@ npm install @fhylabs/qris-dynamic
 ### Node.js / CommonJS
 
 ```js
-const { generateQris } = require("@fhylabs/qris-dynamic/QRISDynamic.cjs.js");
+const { GenerateQris } = require("@fhylabs/qris-dynamic");
 
 (async () => {
-  const result = await generateQris({
-    qris: "00020101021126590013ID.CO.GOPAY.WWW0215...",
-    amount: 15000,
-    type: "base64", // "row" or "base64"
-  });
-
-  console.log(result);
+  try {
+    const res = await GenerateQris({
+      qris: "000201.........",
+      amount: 15000,
+      type: "base64", // "row" or "base64"
+    });
+    console.log("CommonJS Result:", res);
+  } catch (err) {
+    console.error("CommonJS Error:", err);
+  }
 })();
 ```
 
@@ -34,15 +37,26 @@ const { generateQris } = require("@fhylabs/qris-dynamic/QRISDynamic.cjs.js");
 ### ESM / TypeScript
 
 ```ts
-import { generateQris } from "@fhylabs/qris-dynamic/QRISDynamic.esm.js";
+import { GenerateQris } from "@fhylabs/qris-dynamic";
+import { createCanvas } from "canvas";
 
-const result = await generateQris({
-  qris: "00020101021240560011ID.DANA.WWW...",
-  amount: 15000,
-  type: "row", // "row" or "base64"
-});
+// Polyfill for canvas in Node.js
+globalThis.document = {
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {}),
+};
 
-console.log(result);
+(async () => {
+  try {
+    const res = await GenerateQris({
+      qris: "000201.........",
+      amount: 15000,
+      type: "base64", // "row" or "base64"
+    });
+    console.log("ESM Result:", res);
+  } catch (err) {
+    console.error("ESM Error:", err);
+  }
+})();
 ```
 
 ---
@@ -52,31 +66,35 @@ console.log(result);
 Include via `<script>` tag:
 
 ```html
-<script src="node_modules/@fhylabs/qris-dynamic/QRISDynamic.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
 <script>
   (async () => {
-    const result = await QRISDynamic.generateQris({
-      qris: "00020101021240560011ID.DANA.WWW...",
-      amount: 15000,
-      type: "row"
-    });
-    console.log(result);
+    try {
+      const res = await QRISDynamic.GenerateQris({
+        qris: "000201.........",
+        amount: 15000,
+        type: "base64" // "row" or "base64"
+      });
+      document.body.innerHTML = `<pre>${JSON.stringify(res, null, 2)}</pre>`;
+    } catch (err) {
+      console.error("UMD Error:", err);
+    }
   })();
 </script>
 ```
 
 ---
 
-## Output
+## Output Example
 
-### Example when `type: "base64"`
+### When `type: "base64"`
 
 ```json
 {
-  "owner": "FITRI HY",
-  "city": "Tangerang Selatan",
+  "owner": "FITRI HERMA YANTI",
+  "city": "Kota Tangerang",
   "country": "ID",
-  "merchant": "ID.DANA.WWW",
+  "merchant": "DANA",
   "amount": 15000,
   "code": "...",
   "date": "2026-01-13T08:30:00.000Z"
@@ -89,23 +107,23 @@ Include via `<script>` tag:
 
 ### Parameters
 
-| Name     | Type                 | Required | Default | Description                           |
-| -------- | -------------------- | -------- | ------- | ------------------------------------- |
-| `qris`   | `string`             | ✅        | –       | Static QRIS string (raw QRIS payload) |
-| `amount` | `number`             | ✅        | –       | Transaction amount (IDR, no decimals) |
-| `type`   | `"row"` / `"base64"` | ❌        | `"row"` | Output QRIS format                    |
+| Name     | Type                 | Required | Default | Description                             |
+| -------- | -------------------- | -------- | ------- | --------------------------------------- |
+| `qris`   | `string`             | ✅        | –       | Static QRIS string (raw QRIS payload)   |
+| `amount` | `number`             | ✅        | –       | Transaction amount in IDR (no decimals) |
+| `type`   | `"row"` / `"base64"` | ❌        | `"row"` | Output QRIS format                      |
 
 ### Output Fields
 
-| Field      | Type     | Description                             |
-| ---------- | -------- | --------------------------------------- |
-| `owner`    | `string` | Merchant / QRIS owner name              |
-| `city`     | `string` | Merchant city                           |
-| `country`  | `string` | ISO country code, default `ID`          |
-| `merchant` | `string` | QRIS provider (DANA, GoPay, OVO, etc.)  |
-| `amount`   | `number` | Transaction amount                      |
-| `code`     | `string` | Dynamic QRIS (raw string or Base64 PNG) |
-| `date`     | `string` | QRIS generation timestamp (ISO 8601)    |
+| Field      | Type     | Description                                |
+| ---------- | -------- | ------------------------------------------ |
+| `owner`    | `string` | Merchant / QRIS owner name                 |
+| `city`     | `string` | Merchant city                              |
+| `country`  | `string` | ISO country code, default `ID`             |
+| `merchant` | `string` | Vendor / Payment provider (DANA, OVO, etc) |
+| `amount`   | `number` | Transaction amount                         |
+| `code`     | `string` | Dynamic QRIS (raw string or Base64 PNG)    |
+| `date`     | `string` | QRIS generation timestamp (ISO 8601)       |
 
 ---
 
@@ -113,15 +131,5 @@ Include via `<script>` tag:
 
 | Feature   | Description                                 |
 | --------- | ------------------------------------------- |
-| Standard  | EMVCo / QRIS BI                             |
+| Standard  | EMVCo / QRIS Bank Indonesia (BI)            |
 | Providers | DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc |
-
----
-
-💡 **Note:**
-
-* For **Node.js**, import `QRISDynamic.cjs.js`.
-* For **ESM / TypeScript**, import `QRISDynamic.esm.js`.
-* For **browser**, use `QRISDynamic.umd.js`.
-
-Ini **menghilangkan semua kebingungan import/export**, dan siap untuk **semua environment**.

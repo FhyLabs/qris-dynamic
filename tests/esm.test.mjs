@@ -1,11 +1,9 @@
-import { GenerateQris } from "../dist/QRISDynamic.esm.js";
+import { GenerateQris } from "../dist/index.js";
 import { createCanvas } from "canvas";
 
+// Polyfill for canvas in Node.js
 globalThis.document = {
-  createElement: (tag) => {
-    if (tag === "canvas") return createCanvas(400, 400);
-    return {};
-  }
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {}),
 };
 
 (async () => {
@@ -15,8 +13,8 @@ globalThis.document = {
       amount: 15000,
       type: "base64", // "row" or "base64"
     });
-    console.log("ESM Test Result:", res);
+    console.log("ESM Result:", res);
   } catch (err) {
-    console.error("ESM Test Error:", err);
+    console.error("ESM Error:", err);
   }
 })();
