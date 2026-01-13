@@ -30,12 +30,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fitri-hy/qris-dynamic.git"
+    "url": "https://github.com/FhyLabs/qris-dynamic.git"
   },
   "bugs": {
-    "url": "https://github.com/fitri-hy/qris-dynamic/issues"
+    "url": "https://github.com/FhyLabs/qris-dynamic/issues"
   },
-  "homepage": "https://github.com/fitri-hy/qris-dynamic#readme",
+  "homepage": "https://github.com/FhyLabs/qris-dynamic#readme",
   "dependencies": {
     "canvas": "^3.2.1",
     "qrcode": "^1.5.4"
