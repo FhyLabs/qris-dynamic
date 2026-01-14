@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>QRIS UMD Test</title>
-  <script src="../dist/QRISDynamic.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
+
 </head>
 <body>
 <img id="qrImage" alt="QR Code" />
 <script>
   (async () => {
     try {
-      const qrisData = await QRISDynamic.ScannerQR.scan("qrcode.png");
+      const qrisData = "000201010211...";
 
       const res = await QRISDynamic.GenerateQris({
         qris: qrisData,
@@ -18,8 +19,8 @@
         type: "base64"
       });
 
-        console.log(res);
-        document.getElementById("qrImage").src = res.code;
+      console.log(res);
+      document.getElementById("qrImage").src = res.code;
     } catch (err) {
       console.error("Error:", err);
     }
