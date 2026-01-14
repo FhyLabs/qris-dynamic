@@ -1,6 +1,6 @@
-# QRIS Dinamis
+# Dynamic QRIS
 
-Utility untuk mengubah **QRIS statis** menjadi **QRIS dinamis** dengan penambahan otomatis jumlah transaksi, tanpa merusak struktur QRIS asli.
+Sebuah utilitas untuk mengubah **QRIS statis** menjadi **QRIS dinamis** dengan menambahkan jumlah transaksi secara otomatis, tanpa mengubah struktur QRIS asli.
 Mendukung **semua penyedia QRIS Indonesia** sesuai standar **EMVCo / Bank Indonesia (BI)**, termasuk **DANA, GoPay, OVO, ShopeePay, Bank QRIS, dan lainnya**.
 
 ## Instalasi
@@ -9,98 +9,172 @@ Mendukung **semua penyedia QRIS Indonesia** sesuai standar **EMVCo / Bank Indone
 npm install @fhylabs/qris-dynamic
 ```
 
----
+### CommonJS
 
-## Penggunaan
+#### Menggunakan Gambar QRIS
 
-### Node.js / CommonJS
+```javascript
+const { GenerateQris, ScannerQR } = require("@fhylabs/qris-dynamic");
+const path = require("path");
 
-```js
+(async () => {
+  try {
+
+    // QRIS Statis dari Gambar
+    const qrisData = await ScannerQR.scan(path.join(__dirname, "qrcode.png"));
+    
+    const res = await GenerateQris({
+      qris: qrisData,
+      amount: 20000, // jumlah transaksi
+      type: "base64" // output dalam format Base64
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+  }
+})();
+```
+
+#### Menggunakan String QRIS
+
+```javascript
 const { GenerateQris } = require("@fhylabs/qris-dynamic");
 
 (async () => {
   try {
+
+    // QRIS Statis dalam bentuk string
+    const qrisData = "000201010211...";
+    
     const res = await GenerateQris({
-      qris: "000201.........",
-      amount: 15000,
-      type: "base64", // "row" atau "base64"
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
     });
-    console.log("Hasil CommonJS:", res);
-  } catch (err) {
-    console.error("Error CommonJS:", err);
+
+    console.log(res);
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
   }
 })();
 ```
 
----
+### ESM (Module)
 
-### ESM / TypeScript
+#### Menggunakan Gambar QRIS
 
-```ts
-import { GenerateQris } from "@fhylabs/qris-dynamic";
+```javascript
+import { GenerateQris, ScannerQR } from "@fhylabs/qris-dynamic";
 import { createCanvas } from "canvas";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-// Polyfill canvas untuk Node.js
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 globalThis.document = {
-  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {}),
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {})
 };
 
 (async () => {
   try {
+
+    // QRIS Statis dari Gambar
+    const qrisData = await ScannerQR.scan(path.join(__dirname, "qrcode.png"));
+
     const res = await GenerateQris({
-      qris: "000201.........",
-      amount: 15000,
-      type: "base64", // "row" atau "base64"
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
     });
-    console.log("Hasil ESM:", res);
-  } catch (err) {
-    console.error("Error ESM:", err);
+
+    console.log(res);
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
   }
 })();
 ```
 
----
+#### Menggunakan String QRIS
 
-### Browser (UMD)
+```javascript
+import { GenerateQris } from "@fhylabs/qris-dynamic";
+import { createCanvas } from "canvas";
 
-Tambahkan lewat tag `<script>`:
+globalThis.document = {
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {})
+};
+
+(async () => {
+  try {
+
+    // QRIS Statis dalam bentuk string
+    const qrisData = "000201010211...";
+
+    const res = await GenerateQris({
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+  }
+})();
+```
+
+### UMD (Browser)
+
+#### Menggunakan Gambar QRIS
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<img id="qrImage" alt="QR Code" />
 <script>
   (async () => {
     try {
+      const qrisData = await QRISDynamic.ScannerQR.scan("qrcode.png");
+
       const res = await QRISDynamic.GenerateQris({
-        qris: "000201.........",
+        qris: qrisData,
         amount: 15000,
-        type: "base64" // "row" atau "base64"
+        type: "base64"
       });
-      document.body.innerHTML = `<pre>${JSON.stringify(res, null, 2)}</pre>`;
+
+      console.log(res);
+      document.getElementById("qrImage").src = res.code;
     } catch (err) {
-      console.error("Error UMD:", err);
+      console.error("Terjadi kesalahan:", err);
     }
   })();
 </script>
 ```
 
----
+#### Menggunakan String QRIS
 
-## Contoh Output
+```html
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<img id="qrImage" alt="QR Code" />
+<script>
+  (async () => {
+    try {
+      const qrisData = "000201010211...";
 
-### Jika `type: "base64"`
+      const res = await QRISDynamic.GenerateQris({
+        qris: qrisData,
+        amount: 15000,
+        type: "base64"
+      });
 
-```json
-{
-  "owner": "FITRI HERMA YANTI",
-  "city": "Kota Tangerang",
-  "country": "ID",
-  "amount": 15000,
-  "code": "...",
-  "date": "2026-01-13T08:30:00.000Z"
-}
+      console.log(res);
+      document.getElementById("qrImage").src = res.code;
+    } catch (err) {
+      console.error("Terjadi kesalahan:", err);
+    }
+  })();
+</script>
 ```
-
----
 
 ## Referensi API
 
@@ -108,20 +182,20 @@ Tambahkan lewat tag `<script>`:
 
 | Nama     | Tipe                 | Wajib | Default | Deskripsi                                  |
 | -------- | -------------------- | ----- | ------- | ------------------------------------------ |
-| `qris`   | `string`             | ✅     | –       | String QRIS statis (payload QRIS asli)     |
+| `qris`   | `string`             | ✅     | –       | String QRIS statis (payload asli QRIS)     |
 | `amount` | `number`             | ✅     | –       | Jumlah transaksi dalam IDR (tanpa desimal) |
 | `type`   | `"row"` / `"base64"` | ❌     | `"row"` | Format output QRIS                         |
 
 ### Field Output
 
-| Field      | Tipe     | Deskripsi                                     |
-| ---------- | -------- | --------------------------------------------- |
-| `owner`    | `string` | Nama pemilik / merchant QRIS                  |
-| `city`     | `string` | Kota merchant                                 |
-| `country`  | `string` | Kode negara ISO, default `ID`                 |
-| `amount`   | `number` | Jumlah transaksi                              |
-| `code`     | `string` | QRIS dinamis (string mentah atau Base64 PNG)  |
-| `date`     | `string` | Timestamp pembuatan QRIS (ISO 8601)           |
+| Field     | Tipe     | Deskripsi                                  |
+| --------- | -------- | ------------------------------------------ |
+| `owner`   | `string` | Nama merchant / pemilik QRIS               |
+| `city`    | `string` | Kota merchant                              |
+| `country` | `string` | Kode negara ISO, default `ID`              |
+| `amount`  | `number` | Jumlah transaksi                           |
+| `code`    | `string` | QRIS dinamis (string asli atau PNG Base64) |
+| `date`    | `string` | Timestamp pembuatan QRIS (ISO 8601)        |
 
 ---
 
@@ -129,5 +203,5 @@ Tambahkan lewat tag `<script>`:
 
 | Fitur    | Deskripsi                                   |
 | -------- | ------------------------------------------- |
-| Standar  | EMVCo / QRIS Bank Indonesia (BI)            |
+| Standar  | EMVCo / Bank Indonesia (BI)                 |
 | Penyedia | DANA, GoPay, OVO, ShopeePay, Bank QRIS, dll |

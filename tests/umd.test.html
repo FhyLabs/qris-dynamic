@@ -3,22 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <title>QRIS UMD Test</title>
-  <script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
+  <script src="../dist/QRISDynamic.umd.js"></script>
 </head>
 <body>
+<img id="qrImage" alt="QR Code" />
 <script>
-(async () => {
-  try {
-    const res = await QRISDynamic.GenerateQris({
-      qris: "000201.........",
-      amount: 15000,
-      type: "base64" // "row" or "base64"
-    });
-    document.body.innerHTML = `<pre>${JSON.stringify(res, null, 2)}</pre>`;
-  } catch (err) {
-    console.error("UMD Test Error:", err);
-  }
-})();
+  (async () => {
+    try {
+      const qrisData = await QRISDynamic.ScannerQR.scan("qrcode.png");
+
+      const res = await QRISDynamic.GenerateQris({
+        qris: qrisData,
+        amount: 15000,
+        type: "base64"
+      });
+
+        console.log(res);
+        document.getElementById("qrImage").src = res.code;
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  })();
 </script>
 </body>
 </html>

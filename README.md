@@ -1,7 +1,7 @@
-# QRIS Dynamic
+# Dynamic QRIS
 
-A utility to convert **static QRIS** into **dynamic QRIS** with automatic transaction amount insertion, without breaking the original QRIS structure.
-Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI)** standards, including **DANA, GoPay, OVO, ShopeePay, Bank QRIS, and more**.
+A utility to convert **static QRIS** into **dynamic QRIS** by automatically adding the transaction amount, without altering the original QRIS structure.
+Supports **all Indonesian QRIS providers** according to **EMVCo / Bank Indonesia (BI)** standards, including **DANA, GoPay, OVO, ShopeePay, Bank QRIS, and others**.
 
 ## Installation
 
@@ -9,98 +9,172 @@ Supports **all Indonesian QRIS providers** based on **EMVCo / Bank Indonesia (BI
 npm install @fhylabs/qris-dynamic
 ```
 
----
+### CommonJS
 
-## Usage
+#### Image
 
-### Node.js / CommonJS
+```javascript
+const { GenerateQris, ScannerQR } = require("@fhylabs/qris-dynamic");
+const path = require("path");
 
-```js
+(async () => {
+  try {
+
+    // Static QRIS Image
+    const qrisData = await ScannerQR.scan(path.join(__dirname, "qrcode.png"));
+    
+    const res = await GenerateQris({
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+})();
+```
+
+#### String
+
+```javascript
 const { GenerateQris } = require("@fhylabs/qris-dynamic");
 
 (async () => {
   try {
+
+    // Static QRIS String
+    const qrisData = "000201010211...";
+    
     const res = await GenerateQris({
-      qris: "000201.........",
-      amount: 15000,
-      type: "base64", // "row" or "base64"
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
     });
-    console.log("CommonJS Result:", res);
-  } catch (err) {
-    console.error("CommonJS Error:", err);
+
+    console.log(res);
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
 })();
 ```
 
----
+### ESM
 
-### ESM / TypeScript
+#### Image
 
-```ts
-import { GenerateQris } from "@fhylabs/qris-dynamic";
+```javascript
+import { GenerateQris, ScannerQR } from "@fhylabs/qris-dynamic";
 import { createCanvas } from "canvas";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-// Polyfill for canvas in Node.js
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 globalThis.document = {
-  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {}),
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {})
 };
 
 (async () => {
   try {
+
+    // Static QRIS Image
+    const qrisData = await ScannerQR.scan(path.join(__dirname, "qrcode.png"));
+
     const res = await GenerateQris({
-      qris: "000201.........",
-      amount: 15000,
-      type: "base64", // "row" or "base64"
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
     });
-    console.log("ESM Result:", res);
-  } catch (err) {
-    console.error("ESM Error:", err);
+
+    console.log(res);
+  } catch (error) {
+    console.error("An error occurred:", error);
   }
 })();
 ```
 
----
+#### String
 
-### Browser (UMD)
+```javascript
+import { GenerateQris } from "@fhylabs/qris-dynamic";
+import { createCanvas } from "canvas";
 
-Include via `<script>` tag:
+globalThis.document = {
+  createElement: (tag) => (tag === "canvas" ? createCanvas(400, 400) : {})
+};
+
+(async () => {
+  try {
+
+    // Static QRIS String
+    const qrisData = "000201010211...";
+
+    const res = await GenerateQris({
+      qris: qrisData,
+      amount: 20000,
+      type: "base64"
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+})();
+```
+
+### UMD Browser
+
+#### Image
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<img id="qrImage" alt="QR Code" />
 <script>
   (async () => {
     try {
+      const qrisData = await QRISDynamic.ScannerQR.scan("qrcode.png");
+
       const res = await QRISDynamic.GenerateQris({
-        qris: "000201.........",
+        qris: qrisData,
         amount: 15000,
-        type: "base64" // "row" or "base64"
+        type: "base64"
       });
-      document.body.innerHTML = `<pre>${JSON.stringify(res, null, 2)}</pre>`;
+
+      console.log(res);
+      document.getElementById("qrImage").src = res.code;
     } catch (err) {
-      console.error("UMD Error:", err);
+      console.error("Error:", err);
     }
   })();
 </script>
 ```
 
----
+#### String
 
-## Output Example
+```html
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<img id="qrImage" alt="QR Code" />
+<script>
+  (async () => {
+    try {
+      const qrisData = "000201010211...";
 
-### When `type: "base64"`
+      const res = await QRISDynamic.GenerateQris({
+        qris: qrisData,
+        amount: 15000,
+        type: "base64"
+      });
 
-```json
-{
-  "owner": "FITRI HERMA YANTI",
-  "city": "Kota Tangerang",
-  "country": "ID",
-  "amount": 15000,
-  "code": "...",
-  "date": "2026-01-13T08:30:00.000Z"
-}
+      console.log(res);
+      document.getElementById("qrImage").src = res.code;
+    } catch (err) {
+      console.error("Error:", err);
+    }
+  })();
+</script>
 ```
-
----
 
 ## API Reference
 
@@ -114,14 +188,14 @@ Include via `<script>` tag:
 
 ### Output Fields
 
-| Field      | Type     | Description                                |
-| ---------- | -------- | ------------------------------------------ |
-| `owner`    | `string` | Merchant / QRIS owner name                 |
-| `city`     | `string` | Merchant city                              |
-| `country`  | `string` | ISO country code, default `ID`             |
-| `amount`   | `number` | Transaction amount                         |
-| `code`     | `string` | Dynamic QRIS (raw string or Base64 PNG)    |
-| `date`     | `string` | QRIS generation timestamp (ISO 8601)       |
+| Field     | Type     | Description                             |
+| --------- | -------- | --------------------------------------- |
+| `owner`   | `string` | Merchant / QRIS owner name              |
+| `city`    | `string` | Merchant city                           |
+| `country` | `string` | ISO country code, default `ID`          |
+| `amount`  | `number` | Transaction amount                      |
+| `code`    | `string` | Dynamic QRIS (raw string or Base64 PNG) |
+| `date`    | `string` | QRIS generation timestamp (ISO 8601)    |
 
 ---
 
@@ -129,5 +203,5 @@ Include via `<script>` tag:
 
 | Feature   | Description                                 |
 | --------- | ------------------------------------------- |
-| Standard  | EMVCo / QRIS Bank Indonesia (BI)            |
+| Standard  | EMVCo / Bank Indonesia (BI)                 |
 | Providers | DANA, GoPay, OVO, ShopeePay, Bank QRIS, etc |

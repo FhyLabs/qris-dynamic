@@ -5,15 +5,45 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
 
 export default {
   input: "dist/index.js",
+  external: ["fs/promises"],
+
   output: [
-    { file: "dist/QRISDynamic.cjs.js", format: "cjs", exports: "named" },
-    { file: "dist/QRISDynamic.esm.js", format: "esm" },
-    { file: "dist/QRISDynamic.umd.js", format: "umd", name: "QRISDynamic", exports: "named" }
+    {
+      file: "dist/QRISDynamic.cjs.js",
+      format: "cjs",
+      exports: "named"
+    },
+    {
+      file: "dist/QRISDynamic.esm.js",
+      format: "esm"
+    },
+    {
+      file: "dist/QRISDynamic.umd.js",
+      format: "umd",
+      name: "QRISDynamic",
+      exports: "named",
+      globals: {
+        "fs/promises": "fs"
+      }
+    }
   ],
+
   plugins: [
-    nodePolyfills(),
+    nodePolyfills(), 
     resolve({ browser: true, preferBuiltins: false }),
     commonjs(),
     terser()
-  ]
+  ],
+
+  onwarn(warning, warn) {
+    if (
+      warning.code === "CIRCULAR_DEPENDENCY" ||
+      warning.code === "EVAL" ||
+      (warning.code === "UNRESOLVED_IMPORT" &&
+        warning.source === "fs/promises")
+    ) {
+      return;
+    }
+    warn(warning);
+  }
 };

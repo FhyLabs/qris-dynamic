@@ -1,6 +1,6 @@
 {
   "name": "@fhylabs/qris-dynamic",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Convert static QRIS codes into dynamic QRIS with automatic transaction amount insertion. Supports all Indonesian QRIS providers (EMVCo/Bank Indonesia).",
   "main": "index.js",
   "module": "QRISDynamic.cjs.esm.js",
@@ -34,6 +34,8 @@
   "homepage": "https://github.com/FhyLabs/qris-dynamic#readme",
   "dependencies": {
     "canvas": "^3.2.1",
-    "qrcode": "^1.5.4"
+    "jimp": "^1.6.0",
+    "qrcode": "^1.5.4",
+    "qrcode-reader": "^1.0.4"
   }
 }
