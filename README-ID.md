@@ -129,7 +129,7 @@ globalThis.document = {
 #### Menggunakan Gambar QRIS
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
 <img id="qrImage" alt="QR Code" />
 <script>
   (async () => {
@@ -154,7 +154,7 @@ globalThis.document = {
 #### Menggunakan String QRIS
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.3/dist/QRISDynamic.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/FhyLabs/qris-dynamic@v1.0.0/dist/QRISDynamic.umd.js"></script>
 <img id="qrImage" alt="QR Code" />
 <script>
   (async () => {
